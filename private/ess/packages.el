@@ -16,7 +16,6 @@
     ess-R-data-view
     ess-R-object-popup
     ess-smart-equals
-    polymode
     rainbow-delimiters
     ))
 
@@ -58,12 +57,28 @@
 
   ;; R --------------------------------------------------------------------------
   (with-eval-after-load 'ess-site
-    ;; Follow Hadley Wickham's R style guide
-    (setq ess-first-continued-statement-offset 2
-          ess-continued-statement-offset 0
-          ess-expression-offset 2
-          ess-nuke-trailing-whitespace-p t
-          ess-default-style 'DEFAULT)
+    ;; ESS
+    (add-hook 'ess-mode-hook
+              (lambda ()
+                (ess-set-style 'C++ 'quiet)
+                ;; Because
+                ;;                                 DEF GNU BSD K&R C++
+                ;; ess-indent-level                  2   2   8   5   4
+                ;; ess-continued-statement-offset    2   2   8   5   4
+                ;; ess-brace-offset                  0   0  -8  -5  -4
+                ;; ess-arg-function-offset           2   4   0   0   0
+                ;; ess-expression-offset             4   2   8   5   4
+                ;; ess-else-offset                   0   0   0   0   0
+                ;; ess-close-brace-offset            0   0   0   0   0
+                (add-hook 'local-write-file-hooks
+                          (lambda ()
+                            (ess-nuke-trailing-whitespace)))))
+    (setq ess-nuke-trailing-whitespace-p 'ask)
+    ;; or even
+    ;; (setq ess-nuke-trailing-whitespace-p t)
+    ;; Perl
+    (add-hook 'perl-mode-hook
+              (lambda () (setq perl-indent-level 4)))
 
     (defun spacemacs/ess-start-repl ()
       "Start a REPL corresponding to the ess-language of the current buffer."
@@ -119,18 +134,3 @@
     (progn
       (add-hook 'ess-mode-hook 'ess-smart-equals-mode)
       (add-hook 'inferior-ess-mode-hook 'ess-smart-equals-mode))))
-
-(defun ess/init-polymode ()
-  (use-package polymode
-    :mode (("\\.Rmd"   . Rmd-mode))
-    :init
-    (progn
-      (defun Rmd-mode ()
-        "ESS Markdown mode for Rmd files"
-        (interactive)
-        (require 'poly-R)
-        (require 'poly-markdown)
-        (R-mode)
-        (poly-markdown+r-mode))
-      ))
-  )
