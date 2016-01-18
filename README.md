@@ -7,7 +7,7 @@ some private layers.
 
 Layers are in the `private` directory, and now they are:
 
-- [private/ess](): This is a clone of the original Spacemacs ess layer
+- `ess`: This is a clone of the original Spacemacs ess layer
   (available at `layers/+lang/ess`), but it includes the following
   modifications:
   - Add [polymode] to the list of packages to be installed from ELPA,
