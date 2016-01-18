@@ -35,9 +35,11 @@ You should not put any user code in this function besides modifying the
      (spell-checking :variables spell-checking-enable-by-default nil)
      (syntax-checking :variables syntax-checking-enable-by-default nil)
      ;; version-control
-     ess
+     ;; ess
      latex
      ;; private layers
+     ess
+     funk
      polymode
      )
    ;; List of additional packages that will be installed without being
@@ -261,7 +263,7 @@ This function is called at the very end of Spacemacs
 initialization after layers configuration. You are free to put
 any user code."
 
-  ;; Text settings
+  ;; Text settings =====================================================
   (setq-default
    ;; Break lines at specified column (<= 80, defaults 72)
    fill-column 72
@@ -270,32 +272,6 @@ any user code."
    )
   ;; Turn on FCI (Fill Column Indicator) mode
   ; (turn-on-fci-mode)
-
-  ;; ESS default style (this overwrites the layer defaults), based on R
-  ;; coding standards from
-  ;; https://cran.r-project.org/doc/manuals/R-ints.html#R-coding-standards
-  ;; ESS
-  (add-hook 'ess-mode-hook
-            (lambda ()
-              (ess-set-style 'C++ 'quiet)
-              ;; Because
-              ;;                                 DEF GNU BSD K&R C++
-              ;; ess-indent-level                  2   2   8   5   4
-              ;; ess-continued-statement-offset    2   2   8   5   4
-              ;; ess-brace-offset                  0   0  -8  -5  -4
-              ;; ess-arg-function-offset           2   4   0   0   0
-              ;; ess-expression-offset             4   2   8   5   4
-              ;; ess-else-offset                   0   0   0   0   0
-              ;; ess-close-brace-offset            0   0   0   0   0
-              (add-hook 'local-write-file-hooks
-                        (lambda ()
-                          (ess-nuke-trailing-whitespace)))))
-  (setq ess-nuke-trailing-whitespace-p 'ask)
-  ;; or even
-  ;; (setq ess-nuke-trailing-whitespace-p t)
-  ;; Perl
-  (add-hook 'perl-mode-hook
-            (lambda () (setq perl-indent-level 4)))
 
   )
 
