@@ -113,3 +113,12 @@
   )
 ;; key binding
 (global-set-key [?\C--] 'insert-rule-and-comment-3)
+
+;; To revert-buffer without confirmation
+;; Source: http://www.emacswiki.org/emacs-en/download/misc-cmds.el
+(defun revert-buffer-no-confirm ()
+  "Revert buffer without confirmation."
+  (interactive)
+  (revert-buffer t t))
+;; key binding
+(global-set-key [f5] 'revert-buffer-no-confirm)
