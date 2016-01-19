@@ -17,6 +17,7 @@
     ess-R-object-popup
     ess-smart-equals
     rainbow-delimiters
+    smartparens
     ))
 
 (defun ess/init-ess ()
@@ -134,3 +135,12 @@
     (progn
       (add-hook 'ess-mode-hook 'ess-smart-equals-mode)
       (add-hook 'inferior-ess-mode-hook 'ess-smart-equals-mode))))
+
+(defun ess/post-init-smartparens ()
+  (use-package smartparens
+    :defer t
+    :if ess-enable-smartparens
+    :init
+    (progn
+      (add-hook 'ess-mode-hook 'smartparens-mode)
+      (add-hook 'inferior-ess-mode-hook 'smartparens-mode))))

@@ -13,3 +13,6 @@
 
 (defvar ess-enable-smart-equals nil
   "If non-nil smart-equal support is enabled")
+
+(defvar ess-enable-smartparens nil
+  "If non-nil smartparens support is enabled")
