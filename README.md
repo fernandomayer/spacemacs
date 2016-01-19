@@ -8,7 +8,7 @@ interface, and many smart defaults, so you don't have to struggle to let
 your `.emacs` the way you want (although many like the challenge).
 Anyway, Spacemacs let you configure it the same old way, but based on
 *layers*, which makes things much more organized. By the way, Spacemacs
-even let [Vim] users to use their keybindings they were used to, but
+even let [Vim] users to use keybindings they were used to, but
 with the power of Emacs.
 
 This repository contains my `.spacemacs` file (named `spacemacs.el`) and
@@ -49,5 +49,5 @@ advanced settings.
 [polymode]: https://github.com/vspinu/polymode
 [R Coding Standards]: https://cran.r-project.org/doc/manuals/R-ints.html#R-coding-standards
 [Spacemacs]: http://spacemacs.org/
-[Emacs]: http://emacs.org/
+[Emacs]: https://www.gnu.org/software/emacs/
 [Vim]: http://www.vim.org/
