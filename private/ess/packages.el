@@ -127,6 +127,7 @@
 (defun ess/post-init-rainbow-delimiters ()
   (add-hook 'ess-mode-hook #'rainbow-delimiters-mode))
 
+;; To enable smart-equals-mode
 (defun ess/init-ess-smart-equals ()
   (use-package ess-smart-equals
     :defer t
@@ -136,6 +137,7 @@
       (add-hook 'ess-mode-hook 'ess-smart-equals-mode)
       (add-hook 'inferior-ess-mode-hook 'ess-smart-equals-mode))))
 
+;; To enable smartparens-mode in ess and iess
 (defun ess/post-init-smartparens ()
   (use-package smartparens
     :defer t
