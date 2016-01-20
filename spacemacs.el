@@ -39,7 +39,7 @@ You should not put any user code in this function besides modifying the
      latex
      ;; private layers
      (ess :variables
-          ess-enable-smart-equals t
+          ess-enable-smart-equals nil
           ess-enable-smartparens t)
      funk
      polymode
