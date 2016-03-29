@@ -16,3 +16,8 @@
 
 (defvar ess-enable-smartparens nil
   "If non-nil smartparens support is enabled")
+
+;; List of available commands to weave Rnw files. This changes the
+;; default to pdflatex
+
+(setq ess-swv-pdflatex-commands '("pdflatex" "make" "texi2pdf"))
