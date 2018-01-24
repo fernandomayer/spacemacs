@@ -63,6 +63,25 @@ enable the `elpy` layer in your `~/.spacemacs`.
 `elpy` layer as this may cause some conflicts. The `elpy` layer will be
 the only one responsible for handling python files and modes.
 
+### Maxima mode
+
+There is no specific layer to enable the `maxima-mode` in Spacemacs.
+Anyway you can just follow the instructions from
+[here](https://www.emacswiki.org/emacs/MaximaMode) and include the
+appropriate lines in `user-config()` section of your `~/.spacemacs`.
+
+Some details:
+
+- Use `.max` extension
+- `M-x maxima-mode` in the file
+- `M-x imaxima` to open a Maxima terminal with the output rendered as
+  LaTeX
+- Basic commands:
+  - `C-c C-c`: send a line
+  - `C-c *`: open a commentary block
+  - `M-;`: comment a line
+
+
 [polymode]: https://github.com/vspinu/polymode
 [R Coding Standards]: https://cran.r-project.org/doc/manuals/R-ints.html#R-coding-standards
 [Spacemacs]: http://spacemacs.org/
