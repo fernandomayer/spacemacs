@@ -279,6 +279,14 @@ any user code."
    )
   ;; Turn on FCI (Fill Column Indicator) mode
   ; (turn-on-fci-mode)
+  ;; Maxima mode https://www.emacswiki.org/emacs/MaximaMode
+  ;; (add-to-list 'load-path "/usr/local/share/maxima/5.18.1/emacs/")
+  (autoload 'maxima-mode "maxima" "Maxima mode" t)
+  (autoload 'imaxima "imaxima" "Frontend for maxima with Image support" t)
+  (autoload 'maxima "maxima" "Maxima interaction" t)
+  (autoload 'imath-mode "imath" "Imath mode for math formula input" t)
+  (setq imaxima-use-maxima-mode-flag t)
+  (add-to-list 'auto-mode-alist '("\\.ma[cx]" . maxima-mode))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
