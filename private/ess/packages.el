@@ -14,7 +14,7 @@
     company
     ess
     ess-R-data-view
-    ess-R-object-popup
+    ;; ess-R-object-popup
     ess-smart-equals
     rainbow-delimiters
     smartparens
