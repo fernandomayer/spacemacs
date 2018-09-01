@@ -277,6 +277,8 @@ any user code."
    ;; Turns on auto-fill-mode to automatically break lines
    auto-fill-function 'do-auto-fill
    )
+  ;; When scrolling with the cursor, show 4 lines above/below
+  (setq scroll-margin 4)
   ;; Turn on FCI (Fill Column Indicator) mode
   ; (turn-on-fci-mode)
   ;; Maxima mode https://www.emacswiki.org/emacs/MaximaMode
