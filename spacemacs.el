@@ -278,7 +278,21 @@ any user code."
    auto-fill-function 'do-auto-fill
    )
   ;; When scrolling with the cursor, show 4 lines above/below
-  (setq scroll-margin 4)
+  (setq scroll-margin 5)
+  ;; Deactivate scroll margin in terminals
+  (defun spacemacs//unset-scroll-margin ()
+    (setq-local scroll-margin 0))
+  (spacemacs/add-to-hooks
+   'spacemacs//unset-scroll-margin
+   '(
+     messages-buffer-mode-hook
+     comint-mode-hook
+     term-mode-hook
+     erc-mode-hook
+     inferior-ess-mode-hook
+     eshell-mode-hook
+     inferior-python-mode-hook
+     ))
   ;; Turn on FCI (Fill Column Indicator) mode
   ; (turn-on-fci-mode)
   ;; Maxima mode https://www.emacswiki.org/emacs/MaximaMode
