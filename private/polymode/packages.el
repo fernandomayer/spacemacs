@@ -23,6 +23,18 @@
         (R-mode)
         (poly-markdown+r-mode))
       ))
+  (use-package polymode
+    :mode (("\\.Rnw"   . Rnw-mode))
+    :init
+    (progn
+      (defun Rnw-mode ()
+        "ESS LaTeX mode for Rnw files"
+        (interactive)
+        (require 'poly-R)
+        (require 'poly-noweb)
+        (R-mode)
+        (poly-noweb+r-mode))
+      ))
   )
 
 ;;; packages.el ends here
