@@ -33,7 +33,7 @@ Layers are in the `private` directory, and now they are:
   keybindings. It doesn't install any packages, just enable functions in
   `funcs.el`, and enables some keybindings setted in `keybindings.el`
 
-These layers are enabled by moving them to `~/emacs.d/private` and adding
+These layers are enabled by moving them to `~/.emacs.d/private` and adding
 these lines at `dotspacemacs-configuration-layers` in `.spacemacs`
 
 ```
