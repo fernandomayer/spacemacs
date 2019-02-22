@@ -58,7 +58,7 @@ values."
      ;; private layers
      elpy
      (ess :variables
-          ess-enable-smart-equals nil
+          ess-enable-smart-equals t
           ess-enable-smartparens t)
      funk
      polymode
@@ -355,9 +355,6 @@ you should place your code here."
      ))
   ;; Turn on FCI (Fill Column Indicator) mode
   ; (turn-on-fci-mode)
-  ;; Defines the assignment operator in ESS
-  (define-key ess-mode-map "_" 'ess-insert-assign)
-  (define-key inferior-ess-mode-map "_" 'ess-insert-assign)
   ;; Maxima mode https://www.emacswiki.org/emacs/MaximaMode
   ;; (add-to-list 'load-path "/usr/local/share/maxima/5.18.1/emacs/")
   (autoload 'maxima-mode "maxima" "Maxima mode" t)
