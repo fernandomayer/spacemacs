@@ -55,6 +55,7 @@ values."
      ;; version-control
      ;; ess
      latex
+     extra-langs
      ;; private layers
      elpy
      (ess :variables
@@ -152,7 +153,9 @@ values."
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
-   ;; quickly tweak the mode-line size to make separators look not too crappy.
+   ;; quickly tweak the mode-line size to make separators look not too
+   ;; crappy.
+   ;; "IBM Plex Mono" or "Source Code Pro"
    dotspacemacs-default-font '("Source Code Pro"
                                :size 17
                                :weight normal
