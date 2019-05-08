@@ -60,6 +60,7 @@ values."
      elpy
      (ess :variables
           ess-enable-smart-equals t
+          ess-enable-electric-spacing t
           ess-enable-smartparens t)
      funk
      polymode
