@@ -18,6 +18,7 @@
     ess-smart-equals
     rainbow-delimiters
     smartparens
+    :local electric-spacing
     ))
 
 (defun ess/init-ess ()
@@ -146,3 +147,13 @@
     (progn
       (add-hook 'ess-mode-hook 'smartparens-mode)
       (add-hook 'inferior-ess-mode-hook 'smartparens-mode))))
+
+;; To enable electric-spacing-mode in ess and iess
+(defun ess/init-electric-spacing ()
+  (use-package electric-spacing
+    :defer t
+    :if ess-enable-electric-spacing
+    :init
+    (progn
+      (add-hook 'ess-mode-hook 'electric-spacing-mode))))
+      ;; (add-hook 'inferior-ess-mode-hook 'electric-spacing-mode))))
