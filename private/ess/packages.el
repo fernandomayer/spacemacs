@@ -17,8 +17,9 @@
     ;; ess-R-object-popup
     ess-smart-equals
     rainbow-delimiters
+    (electric-spacing-r :location local)
     smartparens
-    :local electric-spacing
+    ;; :local electric-spacing-r
     ))
 
 (defun ess/init-ess ()
@@ -134,6 +135,7 @@
     :defer t
     :if ess-enable-smart-equals
     :init
+    (setq ess-smart-equals-extra-ops '(brace paren percent))
     (progn
       (add-hook 'ess-mode-hook 'ess-smart-equals-mode)
       (add-hook 'inferior-ess-mode-hook 'ess-smart-equals-mode))))
@@ -149,10 +151,10 @@
       (add-hook 'inferior-ess-mode-hook 'smartparens-mode))))
 
 ;; To enable electric-spacing-mode in ess and iess
-(defun ess/init-electric-spacing ()
-  (use-package electric-spacing
-    :defer t
-    :if ess-enable-electric-spacing
+(defun ess/init-electric-spacing-r ()
+  (use-package electric-spacing-r
+    ;; :defer t
+    :if ess-enable-electric-spacing-r
     :init
     (progn
       (add-hook 'ess-mode-hook 'electric-spacing-mode))))
