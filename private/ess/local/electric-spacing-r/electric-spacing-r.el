@@ -69,7 +69,7 @@
     (?. . electric-spacing-.)
     (?/ . electric-spacing-/)
     (?{ . electric-spacing-{)
-    (?( . electric-spacing-\()
+    ;; (?( . electric-spacing-\()
     (?, . electric-spacing-\,)
     ;; (?: . electric-spacing-:)
     ;; (?? . electric-spacing-?)
@@ -573,6 +573,6 @@
 
 ;;----------------------------------------------------------------------
 
-(provide 'electric-spacing)
+(provide 'electric-spacing-r)
 
 ;;; electric-spacing-r.el ends here
