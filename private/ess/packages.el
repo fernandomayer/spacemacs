@@ -145,6 +145,16 @@
   (use-package smartparens
     :defer t
     :if ess-enable-smartparens
+    :diminish smartparens-mode
+    :config
+    (progn
+      (require 'smartparens-config)
+      (smartparens-global-mode 1)
+      (sp-pair "\"" nil :unless '(sp-point-after-word-p))
+      (sp-pair "'" nil :unless '(sp-point-after-word-p))
+      (sp-local-pair '(ess-mode inferior-ess-mode) "(" nil :unless '(sp-point-before-word-p))
+      (sp-local-pair '(ess-mode inferior-ess-mode) "[" nil :unless '(sp-point-before-word-p))
+      (sp-local-pair '(ess-mode inferior-ess-mode) "{" nil :unless '(sp-point-before-word-p)))
     :init
     (progn
       (add-hook 'ess-mode-hook 'smartparens-mode)
