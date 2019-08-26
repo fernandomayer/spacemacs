@@ -93,8 +93,8 @@
     (insert (make-string (- fill-column (current-column)) ?-)))
   )
 ;; key binding
-(global-set-key [?\M--] 'insert-rule-from-point-to-margin)
-(global-set-key [?\M-=]
+(global-set-key [?\C-\M--] 'insert-rule-from-point-to-margin)
+(global-set-key [?\C-\M-=]
                 (lambda ()
                   (interactive)
                   (insert-rule-from-point-to-margin 1)))
