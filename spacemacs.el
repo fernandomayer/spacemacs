@@ -36,6 +36,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     csv     
      helm
      auto-completion
      better-defaults
@@ -59,7 +60,7 @@ values."
      ;; private layers
      elpy
      (ess :variables
-          ess-enable-smart-equals t
+          ;; ess-enable-smart-equals t
           ess-enable-electric-spacing-r t
           ess-enable-smartparens t)
      funk
