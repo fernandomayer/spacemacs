@@ -56,7 +56,23 @@
     :init
     (progn
       (when (configuration-layer/package-usedp 'company)
-          (add-hook 'ess-mode-hook 'company-mode))))
+        (add-hook 'ess-mode-hook 'company-mode)))
+    (use-package ess-r-mode
+      :bind
+      (:map ess-r-mode-map
+            ("M--" . ess-insert-assign)
+            ("M-p" . add-pipe))
+      (:map inferior-ess-r-mode-map
+            ("M--" . ess-insert-assign))
+      :config
+      (defun add-pipe ()
+        (interactive)
+        (end-of-line)
+        (unless (looking-back "%>%" nil)
+          (just-one-space 1)
+          (insert "%>%"))
+        (newline-and-indent))
+      ))
 
   ;; R --------------------------------------------------------------------------
   (with-eval-after-load 'ess-site
@@ -135,7 +151,7 @@
     :defer t
     :if ess-enable-smart-equals
     :init
-    (setq ess-smart-equals-extra-ops '(brace paren percent))
+    ;; (setq ess-smart-equals-extra-ops '(brace paren percent))
     (progn
       (add-hook 'ess-mode-hook 'ess-smart-equals-mode)
       (add-hook 'inferior-ess-mode-hook 'ess-smart-equals-mode))))
