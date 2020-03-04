@@ -36,7 +36,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     csv     
+     csv
      helm
      auto-completion
      better-defaults
@@ -342,6 +342,9 @@ you should place your code here."
    fill-column 72
    ;; Turns on auto-fill-mode to automatically break lines
    auto-fill-function 'do-auto-fill
+   ;; Makes the kill-ring (emacs clipboard) to store only 4 entries,
+   ;; otherwise it may flush memory
+   kill-ring-max 4
    )
   ;; When scrolling with the cursor, show 4 lines above/below
   (setq scroll-margin 5)
