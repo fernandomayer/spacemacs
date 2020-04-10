@@ -19,5 +19,10 @@
 
 ;; List of available commands to weave Rnw files. This changes the
 ;; default to pdflatex
-
 (setq ess-swv-pdflatex-commands '("pdflatex" "make" "texi2pdf"))
+
+;; Set ess-eval-visibly to true, since from version 19.04 (March 2020),
+;; it was set to nil by default. When non-nil, this makes code sent to
+;; iESS buffer to appear in the console, instead of appearing only
+;; outputs.
+(setq ess-eval-visibly t)
