@@ -18,6 +18,7 @@
     ess-smart-equals
     rainbow-delimiters
     (electric-spacing-r :location local)
+    (essh :location local)
     smartparens
     ;; :local electric-spacing-r
     ))
@@ -185,3 +186,18 @@
     (progn
       (add-hook 'ess-mode-hook 'electric-spacing-mode))))
       ;; (add-hook 'inferior-ess-mode-hook 'electric-spacing-mode))))
+
+(defun ess/init-essh ()
+  (use-package essh
+    :config
+    (progn
+      (add-hook
+       'sh-mode-hook
+       '(lambda ()
+          (define-key sh-mode-map "\C-c\C-r" 'pipe-region-to-shell)
+          (define-key sh-mode-map "\C-c\C-b" 'pipe-buffer-to-shell)
+          (define-key sh-mode-map "\C-c\C-j" 'pipe-line-to-shell)
+          ;; (define-key sh-mode-map "\C-c\C-n" 'pipe-line-to-shell-and-step)
+          (define-key sh-mode-map (kbd "<C-return>") 'pipe-line-to-shell-and-step)
+          (define-key sh-mode-map "\C-c\C-f" 'pipe-function-to-shell)
+          (define-key sh-mode-map "\C-c\C-d" 'shell-cd-current-directory))))))
