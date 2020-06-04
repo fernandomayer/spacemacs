@@ -16,6 +16,17 @@
 ;; key binding
 (global-set-key (kbd "C-c i") 'insert-chunk)
 
+;; Insert a special comment ============================================
+;; To give a name to a code block, to be used in knitr code
+;; externalization scripts
+(defun insert-chunk-name ()
+  "Create special commments for code externalization"
+  (interactive)
+  (insert "## ----- ")
+  )
+;; key binding
+(global-set-key (kbd "C-c n") 'insert-chunk-name)
+
 ;; Mark a word at a point ==============================================
 ;; http://www.emacswiki.org/emacs/ess-edit.el
 (defun ess-edit-word-at-point ()
