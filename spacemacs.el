@@ -594,8 +594,10 @@ you should place your code here."
    auto-fill-function 'do-auto-fill
    ;; Makes the kill-ring (emacs clipboard) to store only 4 entries,
    ;; otherwise it may flush memory
-   kill-ring-max 4
+   kill-ring-max 2
    )
+  ;; Disable auto-complation by default
+  (add-hook 'buffer-list-update-hook 'spacemacs/toggle-auto-completion-off)
   ;; When scrolling with the cursor, show 4 lines above/below
   (setq scroll-margin 5)
   ;; Deactivate scroll margin in terminals
