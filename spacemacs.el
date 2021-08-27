@@ -60,7 +60,7 @@ values."
      ;; version-control
      ;; ess
      latex
-     extra-langs
+     ;; extra-langs
      ;; private layers
      ;; elpy
      (ess :variables
@@ -262,8 +262,8 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    ;; "IBM Plex Mono" or "Source Code Pro"
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 17
+   dotspacemacs-default-font '("Fira Code"
+                               :size 18
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -374,7 +374,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar t
+   dotspacemacs-loading-progress-bar nil
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
@@ -521,7 +521,7 @@ It should only modify the values of Spacemacs settings."
    ;; `trailing' to delete only the whitespace at end of lines, `changed' to
    ;; delete only whitespace for changed lines or `nil' to disable cleanup.
    ;; (default nil)
-   dotspacemacs-whitespace-cleanup nil
+   dotspacemacs-whitespace-cleanup 'trailing
 
    ;; If non-nil activate `clean-aindent-mode' which tries to correct
    ;; virtual indentation of simple modes. This can interfere with mode specific
