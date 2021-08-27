@@ -66,6 +66,8 @@ values."
      (ess :variables
           ;; ess-enable-smart-equals t
           ess-enable-electric-spacing-r t
+          ess-r-backend 'lsp
+          ess-use-flymake nil
           ess-enable-smartparens t)
      funk
      polymode
@@ -597,7 +599,7 @@ you should place your code here."
    kill-ring-max 2
    )
   ;; Disable auto-complation by default
-  (add-hook 'buffer-list-update-hook 'spacemacs/toggle-auto-completion-off)
+  ;; (add-hook 'buffer-list-update-hook 'spacemacs/toggle-auto-completion-off)
   ;; When scrolling with the cursor, show 4 lines above/below
   (setq scroll-margin 5)
   ;; Deactivate scroll margin in terminals
