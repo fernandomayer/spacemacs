@@ -47,6 +47,7 @@ values."
      emacs-lisp
      git
      markdown
+     javascript
      org
      (shell :variables
             shell-default-height 30
