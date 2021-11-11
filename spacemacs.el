@@ -58,6 +58,7 @@ values."
      rust
      html
      yaml
+     bm
      ;; version-control
      ;; ess
      latex
