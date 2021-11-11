@@ -201,3 +201,40 @@
           (define-key sh-mode-map (kbd "<C-return>") 'pipe-line-to-shell-and-step)
           (define-key sh-mode-map "\C-c\C-f" 'pipe-function-to-shell)
           (define-key sh-mode-map "\C-c\C-d" 'shell-cd-current-directory))))))
+
+(defun wz-ess-find-and-insert-namespace (beg end)
+  "Preceds a function with its namespace,
+   so `mean(x) -> stats::mean(x)' and
+   `xyplot(...) -> lattice::xyplot()'.
+   Call this function in a R major mode buffer with the function name
+   selected. By Walmes Zeviani."
+  (interactive "r")
+  (let ((string
+         (replace-regexp-in-string
+          "\"" "\\\\\\&"
+          (replace-regexp-in-string
+           "\\\\\"" "\\\\\\&"
+           (buffer-substring-no-properties beg end))))
+        (buf (get-buffer-create "*ess-command-output*")))
+    (ess-force-buffer-current "Process to load into:")
+    (ess-command
+     (format
+      "local({
+           x <- \"%s\"
+           cat(paste0(sub('.*:', '', utils::find(x)), '::', x), \"\\n\")
+       })\n"
+      string) buf)
+    (with-current-buffer buf
+      (goto-char (point-max))
+      (let ((end (point)))
+        (goto-char (point-min))
+        (skip-chars-forward " +")
+        (setq string (buffer-substring-no-properties (point) end))))
+    (delete-region beg end)
+    (insert string)
+    (delete-char -1)))
+
+(add-hook
+ 'ess-mode-hook
+ (lambda ()
+   (local-set-key (kbd "C-:") 'wz-ess-find-and-insert-namespace)))
