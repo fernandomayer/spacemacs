@@ -47,7 +47,7 @@ values."
      emacs-lisp
      git
      markdown
-     javascript
+     javascript ; for json files
      org
      (shell :variables
             shell-default-height 30
@@ -59,6 +59,10 @@ values."
      html
      yaml
      bm
+     ;; For docker, see
+     ;; https://develop.spacemacs.org/layers/+tools/docker/README.html
+     ;; to install dependencies (hadolint is in AUR)
+     (docker :variables docker-dockerfile-backend 'lsp)
      ;; version-control
      ;; ess
      latex
