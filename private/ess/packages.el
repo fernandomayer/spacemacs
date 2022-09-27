@@ -63,7 +63,8 @@
       (:map ess-r-mode-map
             ("M--" . ess-insert-assign)
             ("M-p" . add-pipe-magrittr)
-            ("M-o" . add-pipe-native))
+            ("M-o" . add-pipe-native)
+            ("M-k" . add-knitr-opts))
       (:map inferior-ess-r-mode-map
             ("M--" . ess-insert-assign)
             ("M-p" . add-pipe-magrittr-inf)
@@ -95,6 +96,13 @@
         (unless (looking-back "|>" nil)
           (just-one-space 1)
           (insert "|> ")))
+      (defun add-knitr-opts ()
+        (interactive)
+        (beginning-of-line)
+        (unless (looking-back "#|" nil)
+          (just-one-space 0)
+          (insert "#| ")
+          (end-of-line)))
       ))
 
   ;; R --------------------------------------------------------------------------
