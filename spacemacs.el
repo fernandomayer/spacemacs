@@ -88,6 +88,7 @@ values."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
                                       poly-R
+                                      quarto-mode
                                       poly-noweb
                                       poly-markdown)
    ;; A list of packages that cannot be updated.

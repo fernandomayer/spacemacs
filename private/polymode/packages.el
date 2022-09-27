@@ -35,6 +35,9 @@
         (R-mode)
         (poly-noweb+r-mode))
       ))
+  (use-package quarto-mode
+    :mode (("\\.qmd" . poly-quarto-mode))
+    )
   )
 
 ;;; packages.el ends here
