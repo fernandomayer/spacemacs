@@ -26,3 +26,6 @@
 ;; iESS buffer to appear in the console, instead of appearing only
 ;; outputs.
 (setq ess-eval-visibly t)
+
+;; No indent levels, i.e., no more identation with one '#'
+(setq ess-indent-with-fancy-comments nil)
