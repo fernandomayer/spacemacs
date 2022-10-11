@@ -1,0 +1,87 @@
+* elpy layer
+A [[http:spacemacs.org][Spacemacs]] layer that allows to work with Python in style similar to [[http:ess.r-project.org][ESS]]. The
+layer is based on [[https:github.com/jorgenschaefer/elpy][elpy]] and is an alternative to the ~python~ layer of Spacemacs.
+
+Most of the functionality originally provided by this layer has meanwhile been
+integrated into ~elpy~. This layer now mainly sets things up an adds suitable
+keybindings.
+
+** Sending code fragments to the shell
+
+Provides keybindings to send a Python statement, function definition, a class
+definition, a top-level statement, a group of Python statements, a cell, a
+region, or a buffer to the Python shell.
+
+Each evaluation function has four variants, one for each combination of: whether
+or not the point should move after sending ("step"), and whether or not the
+Python shell should be focused after sending ("go").
+
+These commands are bound to prefix ~,e~ (send and keep point) and prefix ~,s~
+(send and step). The suffixes are ~e~ for statement, ~f~ for function, ~c~ for
+class, ~s~ for top-level statement, ~g~ for group (sequence of top-level
+statements not separated by a blank line), ~w~ for cell, ~r~ for region, and ~b~
+for buffer. Capital suffix letters focus on the Python shell after sending.
+
+For example:
+| ~,ef~ | Evaluate current function and keep the point where it is                                                  |
+| ~,eF~ | Evaluate current function, keep the point where it is, and switch focus to the Python shell               |
+| ~,sf~ | Evaluate current function and move point to first subsequent statement                                    |
+| ~,sF~ | Evaluate current function, move point to first subsequent statement, and switch focus to the Python shell |
+
+** Toggles
+| ~,td~ | Toggle whether to show the shell buffer after sending something to it       |
+| ~,ti~ | Toggle whether to show code fragments sent to the shell in the shell buffer |
+| ~,to~ | Toggle whether to show shell outputs in the echo area                       |
+
+** python-mode bindings
+| ~,h~  | elpy-doc                                         |
+| ~,ga~ | elpy-goto-assignment                             |
+| ~,gA~ | elpy-goto-assignment-other-window                |
+| ~,gg~ | elpy-goto-definition                             |
+| ~,go~ | elpy-occur-definitions                           |
+| ~,gG~ | elpy-goto-definition-other-window                |
+| ~,gi~ | elpy-shell-switch-to-shell                       |
+| ~,gI~ | elpy-shell-switch-to-shell-in-current-window     |
+| ~,ee~ | elpy-shell-send-statement                        |
+| ~,eE~ | elpy-shell-send-statement-and-go                 |
+| ~,es~ | elpy-shell-send-top-statement                    |
+| ~,eS~ | elpy-shell-send-top-statement-and-go             |
+| ~,ef~ | elpy-shell-send-defun                            |
+| ~,eF~ | elpy-shell-send-defun-and-go                     |
+| ~,ec~ | elpy-shell-send-defclass                         |
+| ~,eC~ | elpy-shell-send-defclass-and-go                  |
+| ~,eg~ | elpy-shell-send-group                            |
+| ~,eG~ | elpy-shell-send-group-and-go                     |
+| ~,ew~ | elpy-shell-send-codecell                         |
+| ~,eW~ | elpy-shell-send-codecell-and-go                  |
+| ~,er~ | elpy-shell-send-region-or-buffer                 |
+| ~,eR~ | elpy-shell-send-region-or-buffer-and-go          |
+| ~,eb~ | elpy-shell-send-buffer                           |
+| ~,eB~ | elpy-shell-send-buffer-and-go                    |
+| ~,se~ | elpy-shell-send-statement-and-step               |
+| ~,sE~ | elpy-shell-send-statement-and-step-and-go        |
+| ~,ss~ | elpy-shell-send-top-statement-and-step           |
+| ~,sS~ | elpy-shell-send-top-statement-and-step-and-go    |
+| ~,sf~ | elpy-shell-send-defun-and-step                   |
+| ~,sF~ | elpy-shell-send-defun-and-step-and-go            |
+| ~,sc~ | elpy-shell-send-defclass-and-step                |
+| ~,sC~ | elpy-shell-send-defclass-and-step-and-go         |
+| ~,sg~ | elpy-shell-send-group-and-step                   |
+| ~,sG~ | elpy-shell-send-group-and-step-and-go            |
+| ~,sw~ | elpy-shell-send-codecell-and-step                |
+| ~,sW~ | elpy-shell-send-codecell-and-step-and-go         |
+| ~,sr~ | elpy-shell-send-region-or-buffer-and-step        |
+| ~,sR~ | elpy-shell-send-region-or-buffer-and-step-and-go |
+| ~,sb~ | elpy-shell-send-buffer-and-step                  |
+| ~,sB~ | elpy-shell-send-buffer-and-step-and-go           |
+| ~,Va~ | pyvenv-activate                                  |
+| ~,Vd~ | pyvenv-deactivate                                |
+| ~,Vw~ | pyvenv-workon                                    |
+| ~,nc~ | elpy/insert-codecell-above                       |
+| ~,nm~ | elpy/insert-markdowncell-above                   |
+
+** inferior-python-mode bindings
+In the Python shell, ~C-r~ is bound to counsel the shell history.
+
+| ~,gi~ | elpy-shell-switch-to-buffer                   |
+| ~,gI~ | elpy-shell-switch-to-buffer-in-current-window |
