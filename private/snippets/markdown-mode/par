@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: par
+# key: par
+# binding: "keybinding"
+# --
+[**p. $1, par. $2, l. $3**] $0
