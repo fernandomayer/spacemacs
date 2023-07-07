@@ -223,7 +223,7 @@
     (progn
       (add-hook
        'sh-mode-hook
-       '(lambda ()
+       #'(lambda ()
           (define-key sh-mode-map "\C-c\C-r" 'pipe-region-to-shell)
           (define-key sh-mode-map "\C-c\C-b" 'pipe-buffer-to-shell)
           (define-key sh-mode-map "\C-c\C-j" 'pipe-line-to-shell)

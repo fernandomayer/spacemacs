@@ -48,7 +48,7 @@
     ;; configure auto-completion
     (setq elpy-rpc-backend "jedi")
     (add-hook  'elpy-mode-hook
-               '(lambda ()
+               #'(lambda ()
                   ;; after 2 seconds or C-tab
                   (setq company-minimum-prefix-length 2)
                   (setq company-idle-delay 2)
