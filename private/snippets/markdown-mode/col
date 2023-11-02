@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: col
+# key: col
+# binding: "keybinding"
+# --
+:::: {.columns}
+
+::: {.column width="50%"}
+$1
+:::
+
+::: {.column width="50%"}
+$2
+:::
+
+::::

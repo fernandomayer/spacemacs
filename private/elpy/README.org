@@ -1,8 +1,4 @@
 * elpy layer
-
-This directory is a copy from [[https://github.com/rgemulla/spacemacs-layers/tree/master/+lang/elpy][elpy layer]] by [[https://github.com/rgemulla][Rainer Gemulla]], distributed
-under the [[https://github.com/rgemulla/spacemacs-layers/blob/master/LICENSE][GNU General Public License v3.0]].
-
 A [[http:spacemacs.org][Spacemacs]] layer that allows to work with Python in style similar to [[http:ess.r-project.org][ESS]]. The
 layer is based on [[https:github.com/jorgenschaefer/elpy][elpy]] and is an alternative to the ~python~ layer of Spacemacs.
 

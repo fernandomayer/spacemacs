@@ -48,11 +48,11 @@
     ;; configure auto-completion
     (setq elpy-rpc-backend "jedi")
     (add-hook  'elpy-mode-hook
-               #'(lambda ()
+               '(lambda ()
                   ;; after 2 seconds or C-tab
                   (setq company-minimum-prefix-length 2)
                   (setq company-idle-delay 2)
-                  (define-key elpy-mode-map (kbd "S-<tab>") 'company-complete)))
+                  (define-key elpy-mode-map (kbd "<tab>") 'company-complete)))
 
     ;; python-mode key bindings
     (spacemacs/declare-prefix-for-mode 'python-mode "mh" "help")

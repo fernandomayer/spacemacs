@@ -83,6 +83,7 @@
         (unless (looking-back "%>%" nil)
           (just-one-space 1)
           (insert "%>% ")))
+
       (defun add-pipe-native ()
         (interactive)
         (end-of-line)
@@ -90,6 +91,34 @@
           (just-one-space 1)
           (insert "|>"))
         (newline-and-indent))
+
+      ;; (defun add-pipe-native ()
+      ;;   (interactive)
+      ;;   (end-of-line)
+      ;;   (unless (looking-back "|>" nil)
+      ;;     (just-one-space 1)
+      ;;     (insert "|>"))
+      ;;   (save-excursion
+      ;;     ;; (forward-line 1)
+      ;;     (next-line 1)
+      ;;     (beginning-of-line)
+      ;;     (if (looking-at-p "[[:blank:]][[:alpha:]]$")  ; Check if the next line is empty
+      ;;         (indent)
+      ;;       (newline))))
+
+      ;; (defun add-pipe-native ()
+      ;;   (interactive)
+      ;;   (end-of-line)
+      ;;   (unless (looking-back "|>" nil)
+      ;;     (just-one-space 1)
+      ;;     (insert "|>"))
+      ;;   (save-excursion
+      ;;     (forward-line 1)
+      ;;     (beginning-of-line)
+      ;;     (if (looking-at-p "^\\s-*$") ; Check if the next line is empty
+      ;;         (delete-blank-lines)
+      ;;       (newline-and-indent))))
+
       (defun add-pipe-native-inf ()
         (interactive)
         (end-of-line)
