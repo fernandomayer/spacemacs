@@ -54,7 +54,6 @@ values."
             shell-default-position 'bottom)
      (spell-checking :variables spell-checking-enable-by-default nil)
      (syntax-checking :variables syntax-checking-enable-by-default nil)
-     ipython-notebook
      rust
      html
      yaml
@@ -68,7 +67,9 @@ values."
      latex
      ;; extra-langs
      ;; private layers
-     ;; elpy
+     elpy
+     ipython-notebook
+     ;; python
      (ess :variables
           ;; ess-enable-smart-equals t
           ess-enable-electric-spacing-r t
@@ -86,11 +87,17 @@ values."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(
-                                      poly-R
-                                      quarto-mode
-                                      poly-noweb
-                                      poly-markdown)
+   dotspacemacs-additional-packages
+   '(
+     poly-R
+     quarto-mode
+     poly-noweb
+     poly-markdown
+     (copilot :location (recipe
+                         :fetcher github
+                         :repo "zerolfx/copilot.el"
+                         :files ("*.el" "dist")))
+     )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
@@ -275,8 +282,8 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    ;; "IBM Plex Mono" or "Source Code Pro" or "Fira Code"
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 14.0
+   dotspacemacs-default-font '("JetBrains Mono"
+                               :size 13.0
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -582,7 +589,9 @@ See the header of this file for more information."
 This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
-If you are unsure, try setting them in `dotspacemacs/user-config' first.")
+If you are unsure, try setting them in `dotspacemacs/user-config'
+  first."
+  (spacemacs/force-init-spacemacs-env))
 
 
 (defun dotspacemacs/user-load ()
@@ -608,6 +617,8 @@ you should place your code here."
    ;; Makes the kill-ring (emacs clipboard) to store only 4 entries,
    ;; otherwise it may flush memory
    kill-ring-max 2
+   ;; Set the column number to start at 1 rather than 0 on spaceline
+   column-number-indicator-zero-based nil
    )
   ;; Disable auto-complation by default
   ;; (add-hook 'buffer-list-update-hook 'spacemacs/toggle-auto-completion-off)
@@ -637,6 +648,19 @@ you should place your code here."
   (autoload 'imath-mode "imath" "Imath mode for math formula input" t)
   (setq imaxima-use-maxima-mode-flag t)
   (add-to-list 'auto-mode-alist '("\\.ma[cx]" . maxima-mode))
+
+  (with-eval-after-load 'company
+    ;; disable inline previews
+    (delq 'company-preview-if-just-one-frontend company-frontends))
+
+  (with-eval-after-load 'copilot
+    (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+    (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+    (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
+    (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word))
+
+  (add-hook 'prog-mode-hook 'copilot-mode)
+
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
