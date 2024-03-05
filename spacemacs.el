@@ -656,8 +656,8 @@ you should place your code here."
   (with-eval-after-load 'copilot
     (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
     (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
-    (define-key copilot-completion-map (kbd "C-TAB") 'copilot-accept-completion-by-word)
-    (define-key copilot-completion-map (kbd "C-<tab>") 'copilot-accept-completion-by-word))
+    (define-key copilot-completion-map (kbd "s-TAB") 'copilot-accept-completion-by-word)
+    (define-key copilot-completion-map (kbd "s-<tab>") 'copilot-accept-completion-by-word))
 
   (customize-set-variable 'copilot-enable-predicates nil)
 
