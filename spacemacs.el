@@ -88,9 +88,11 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages
    '(
+     gptel
      poly-R
      quarto-mode
      poly-noweb
+     poly-org
      poly-markdown
      (copilot :location (recipe
                          :fetcher github
@@ -629,7 +631,7 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-;; Text settings =====================================================
+  ;; Text settings -----------------------------------------------------
   (setq-default
    ;; Break lines at specified column (<= 80, defaults 72)
    fill-column 72
@@ -660,8 +662,14 @@ you should place your code here."
      inferior-python-mode-hook
      ))
   ;; Turn on FCI (Fill Column Indicator) mode
-  ; (turn-on-fci-mode)
-  ;; Maxima mode https://www.emacswiki.org/emacs/MaximaMode
+  ;; (turn-on-fci-mode)
+
+  ;; imenu-mode --------------------------------------------------------
+  (setq imenu-list-stay-in-window t)
+  (setq imenu-list-position 'left)
+  (setq imenu-list-size 40)
+
+  ;; Maxima mode https://www.emacswiki.org/emacs/MaximaMode ------------
   ;; (add-to-list 'load-path "/usr/local/share/maxima/5.18.1/emacs/")
   (autoload 'maxima-mode "maxima" "Maxima mode" t)
   (autoload 'imaxima "imaxima" "Frontend for maxima with Image support" t)
@@ -681,8 +689,28 @@ you should place your code here."
     (define-key copilot-completion-map (kbd "s-<tab>") 'copilot-accept-completion-by-word))
 
   (customize-set-variable 'copilot-enable-predicates nil)
-
   (add-hook 'prog-mode-hook 'copilot-mode)
+
+  ;; gptel-mode --------------------------------------------------------
+  (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
+  (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+  (add-hook 'gptel-post-response-functions 'fill-region)
+  (setq gptel-default-mode 'markdown-mode)
+  (setq-default gptel-model "gpt-4o")
+
+  ;; Set prompt and response prefixes for different modes
+  (setq gptel-prompt-prefix-alist
+        '((text-mode . "**Prompt**: ")
+          (org-mode . "**Prompt**: ")
+          (markdown-mode . "**Prompt**: ")))
+  (setq gptel-response-prefix-alist
+        '((text-mode . "**Response**: ")
+          (org-mode . "**Response**: ")
+          (markdown-mode . "**Response**: ")))
+
+  ;; org-mode ----------------------------------------------------------
+  (setq org-preview-latex-default-process 'dvisvgm)
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 
   )
 
