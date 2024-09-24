@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: note
+# key: note
+# binding: "keybinding"
+# --
+::: {.callout-note title="$1"}
+
+:::
