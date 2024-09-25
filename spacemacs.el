@@ -665,9 +665,12 @@ you should place your code here."
   ;; (turn-on-fci-mode)
 
   ;; imenu-mode --------------------------------------------------------
-  (setq imenu-list-stay-in-window t)
   (setq imenu-list-position 'left)
-  (setq imenu-list-size 40)
+  (setq imenu-list-size 20)
+  (defun my-imenu-list-font-size ()
+    "Set a custom font size for `imenu-list`."
+    (face-remap-add-relative 'default :height 0.8))
+  (add-hook 'imenu-list-major-mode-hook 'my-imenu-list-font-size)
 
   ;; Maxima mode https://www.emacswiki.org/emacs/MaximaMode ------------
   ;; (add-to-list 'load-path "/usr/local/share/maxima/5.18.1/emacs/")
