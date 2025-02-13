@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: snotes
+# key: snotes
+# binding: "keybinding"
+# --
+::: {.notes}
+$1
+:::
