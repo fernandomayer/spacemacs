@@ -604,7 +604,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -621,7 +621,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config'
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-)
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -634,7 +634,7 @@ you should place your code here."
   ;; Text settings -----------------------------------------------------
   (setq-default
    ;; Break lines at specified column (<= 80, defaults 72)
-   fill-column 72
+   fill-column 80
    ;; Turns on auto-fill-mode to automatically break lines
    auto-fill-function 'do-auto-fill
    ;; Makes the kill-ring (emacs clipboard) to store only 4 entries,
