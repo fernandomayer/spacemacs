@@ -52,7 +52,7 @@ This function should only modify configuration layer settings."
             shell-default-height 30
             shell-default-position 'bottom)
      (spell-checking :variables spell-checking-enable-by-default nil)
-     (syntax-checking :variables syntax-checking-enable-by-default nil)
+     ;; (syntax-checking :variables syntax-checking-enable-by-default nil)
      rust
      html
      yaml
@@ -693,6 +693,7 @@ you should place your code here."
 
   (customize-set-variable 'copilot-enable-predicates nil)
   (add-hook 'prog-mode-hook 'copilot-mode)
+  (setq copilot--indent-warning-printed-p nil)
 
   ;; gptel-mode --------------------------------------------------------
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
@@ -714,6 +715,9 @@ you should place your code here."
   ;; org-mode ----------------------------------------------------------
   (setq org-preview-latex-default-process 'dvisvgm)
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+
+  ;; magit ------------------------------------------------------------
+  ;; (setq magit-show-long-lines-warning nil)
 
   )
 
