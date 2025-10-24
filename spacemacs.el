@@ -89,6 +89,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages
    '(
      gptel
+     gptel-commit
      poly-R
      quarto-mode
      poly-noweb
@@ -524,7 +525,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("rg" "ag" "ack" "grep")
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -685,22 +686,24 @@ you should place your code here."
     ;; disable inline previews
     (delq 'company-preview-if-just-one-frontend company-frontends))
 
-  (with-eval-after-load 'copilot
-    (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
-    (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
-    (define-key copilot-completion-map (kbd "s-TAB") 'copilot-accept-completion-by-word)
-    (define-key copilot-completion-map (kbd "s-<tab>") 'copilot-accept-completion-by-word))
+  ;;  (with-eval-after-load 'copilot
+  ;;    (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+  ;;  (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+  ;;    (define-key copilot-completion-map (kbd "s-TAB") 'copilot-accept-completion-by-word)
+  ;;    (define-key copilot-completion-map (kbd "s-<tab>") 'copilot-accept-completion-by-word))
 
-  (customize-set-variable 'copilot-enable-predicates nil)
-  (add-hook 'prog-mode-hook 'copilot-mode)
-  (setq copilot--indent-warning-printed-p nil)
+  ;;  (customize-set-variable 'copilot-enable-predicates nil)
+  ;;  (add-hook 'prog-mode-hook 'copilot-mode)
+  ;;  (setq copilot--indent-warning-printed-p nil)
 
   ;; gptel-mode --------------------------------------------------------
   (add-hook 'gptel-post-stream-hook 'gptel-auto-scroll)
   (add-hook 'gptel-post-response-functions 'gptel-end-of-response)
   (add-hook 'gptel-post-response-functions 'fill-region)
   (setq gptel-default-mode 'markdown-mode)
-  (setq-default gptel-model "gpt-4o")
+  ;; (setq-default gptel-model "gpt-4o")
+  (setq gptel-model 'claude-sonnet-4
+        gptel-backend (gptel-make-gh-copilot "Copilot"))
 
   ;; Set prompt and response prefixes for different modes
   (setq gptel-prompt-prefix-alist
@@ -712,9 +715,15 @@ you should place your code here."
           (org-mode . "**Response**: ")
           (markdown-mode . "**Response**: ")))
 
+  (use-package gptel-commit
+    :ensure t
+    :after (gptel magit)
+    :custom
+    (gptel-commit-stream t))
+
   ;; org-mode ----------------------------------------------------------
-  (setq org-preview-latex-default-process 'dvisvgm)
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+  ;; (setq org-preview-latex-default-process 'dvisvgm)
+  ;; (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
 
   ;; magit ------------------------------------------------------------
   ;; (setq magit-show-long-lines-warning nil)
