@@ -10,18 +10,19 @@
 ;;; License: GPLv3
 
 (setq ess-packages
-  '(
-    ;; company
-    ess
-    ess-R-data-view
-    ;; ess-R-object-popup
-    ess-smart-equals
-    rainbow-delimiters
-    (electric-spacing-r :location local)
-    (essh :location local)
-    smartparens
-    ;; :local electric-spacing-r
-    ))
+      '(
+        ;; company
+        ess
+        ess-R-data-view
+        ;; ess-R-object-popup
+        ess-smart-equals
+        rainbow-delimiters
+        (electric-spacing-r :location local)
+        (essh :location local)
+        smartparens
+        essgd
+        ;; :local electric-spacing-r
+        ))
 
 (defun ess/init-ess ()
   (use-package ess-site
@@ -297,3 +298,9 @@
  'ess-mode-hook
  (lambda ()
    (local-set-key (kbd "C-:") 'wz-ess-find-and-insert-namespace)))
+
+(defun ess/init-essgd ()
+  "Initialize essgd package."
+  (use-package essgd
+    ;; Add any specific configuration or keybindings here
+    ))

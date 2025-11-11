@@ -702,7 +702,7 @@ you should place your code here."
   (add-hook 'gptel-post-response-functions 'fill-region)
   (setq gptel-default-mode 'markdown-mode)
   ;; (setq-default gptel-model "gpt-4o")
-  (setq gptel-model 'claude-sonnet-4
+  (setq gptel-model 'claude-sonnet-4.5
         gptel-backend (gptel-make-gh-copilot "Copilot"))
 
   ;; Set prompt and response prefixes for different modes
@@ -715,6 +715,7 @@ you should place your code here."
           (org-mode . "**Response**: ")
           (markdown-mode . "**Response**: ")))
 
+  ;; gptel-commit from https://github.com/lakkiy/gptel-commit
   (use-package gptel-commit
     :ensure t
     :after (gptel magit)
