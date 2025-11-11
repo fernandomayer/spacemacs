@@ -245,7 +245,7 @@
     :init
     (progn
       (add-hook 'ess-mode-hook 'electric-spacing-mode))))
-      ;; (add-hook 'inferior-ess-mode-hook 'electric-spacing-mode))))
+;; (add-hook 'inferior-ess-mode-hook 'electric-spacing-mode))))
 
 (defun ess/init-essh ()
   (use-package essh
@@ -254,13 +254,13 @@
       (add-hook
        'sh-mode-hook
        #'(lambda ()
-          (define-key sh-mode-map "\C-c\C-r" 'pipe-region-to-shell)
-          (define-key sh-mode-map "\C-c\C-b" 'pipe-buffer-to-shell)
-          (define-key sh-mode-map "\C-c\C-j" 'pipe-line-to-shell)
-          ;; (define-key sh-mode-map "\C-c\C-n" 'pipe-line-to-shell-and-step)
-          (define-key sh-mode-map (kbd "<C-return>") 'pipe-line-to-shell-and-step)
-          (define-key sh-mode-map "\C-c\C-f" 'pipe-function-to-shell)
-          (define-key sh-mode-map "\C-c\C-d" 'shell-cd-current-directory))))))
+           (define-key sh-mode-map "\C-c\C-r" 'pipe-region-to-shell)
+           (define-key sh-mode-map "\C-c\C-b" 'pipe-buffer-to-shell)
+           (define-key sh-mode-map "\C-c\C-j" 'pipe-line-to-shell)
+           ;; (define-key sh-mode-map "\C-c\C-n" 'pipe-line-to-shell-and-step)
+           (define-key sh-mode-map (kbd "<C-return>") 'pipe-line-to-shell-and-step)
+           (define-key sh-mode-map "\C-c\C-f" 'pipe-function-to-shell)
+           (define-key sh-mode-map "\C-c\C-d" 'shell-cd-current-directory))))))
 
 (defun wz-ess-find-and-insert-namespace (beg end)
   "Preceds a function with its namespace,
@@ -299,6 +299,9 @@
  (lambda ()
    (local-set-key (kbd "C-:") 'wz-ess-find-and-insert-namespace)))
 
+;; essgd for plots inside emacs buffer. See
+;; https://melpa.org/#/essgd
+;; https://github.com/sje30/essgd
 (defun ess/init-essgd ()
   "Initialize essgd package."
   (use-package essgd
