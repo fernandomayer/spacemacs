@@ -314,9 +314,13 @@
   "Send dev.off() to the inferior R process."
   (interactive)
   (ess-eval-linewise "dev.off()"))
+
 ;; Set keybindings
 (defun ess/post-init-ess ()
+  ;; R source buffers
   (with-eval-after-load 'ess-r-mode
     (define-key ess-r-mode-map (kbd "C-c d o") #'ess-dev-off))
-  (with-eval-after-load 'ess-inf
-    (define-key inferior-ess-r-mode-map (kbd "C-c d o") #'ess-dev-off)))
+  ;; iESS (*R* REPL) – bind when the mode starts, no map needed at compile time
+  (add-hook 'inferior-ess-r-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c d o") #'ess-dev-off))))
