@@ -307,3 +307,16 @@
   (use-package essgd
     ;; Add any specific configuration or keybindings here
     ))
+
+;; This was done to facilitate sending dev.off() to iESS when using
+;; options(device = "cairo_pdf")
+(defun ess-dev-off ()
+  "Send dev.off() to the inferior R process."
+  (interactive)
+  (ess-eval-linewise "dev.off()"))
+;; Set keybindings
+(defun ess/post-init-ess ()
+  (with-eval-after-load 'ess-r-mode
+    (define-key ess-r-mode-map (kbd "C-c d o") #'ess-dev-off))
+  (with-eval-after-load 'ess-inf
+    (define-key inferior-ess-r-mode-map (kbd "C-c d o") #'ess-dev-off)))
