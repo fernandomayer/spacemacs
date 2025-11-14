@@ -317,10 +317,47 @@
 
 ;; Set keybindings
 (defun ess/post-init-ess ()
-  ;; R source buffers
+  ;; R source buffers: C-. to dev.off()
   (with-eval-after-load 'ess-r-mode
-    (define-key ess-r-mode-map (kbd "C-c d o") #'ess-dev-off))
+    (define-key ess-r-mode-map (kbd "C-.") #'ess-dev-off))
+
   ;; iESS (*R* REPL) – bind when the mode starts, no map needed at compile time
   (add-hook 'inferior-ess-r-mode-hook
             (lambda ()
-              (local-set-key (kbd "C-c d o") #'ess-dev-off))))
+              (local-set-key (kbd "C-.") #'ess-dev-off)))
+
+  ;; Markdown / Rmarkdown
+  (add-hook 'markdown-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-.") #'ess-dev-off)))
+
+  ;; Polymode host for Rmarkdown/Quarto
+  (add-hook 'poly-markdown+r-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-.") #'ess-dev-off)))
+
+  ;; Quarto major mode
+  (add-hook 'quarto-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-.") #'ess-dev-off)))
+
+  ;; --- Bind C-c C-p ONLY inside R code chunks ---
+  ;; This was done to avoid the cursor stepping out from a code chunk to the
+  ;; text in quarto/Rmarkdown files
+  ;; Polymode inner R mode (most common)
+  (add-hook 'poly-r-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c C-p") #'ess-eval-paragraph)))
+
+  ;; Older polymode ESS inner mode
+  (add-hook 'poly-ess-r-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-c C-p") #'ess-eval-paragraph)))
+
+  ;; Fallback: indirect ESS R buffer inside polymode
+  ;; (safe to include; triggers only in R chunk buffers)
+  (add-hook 'ess-r-mode-hook
+            (lambda ()
+              (when (bound-and-true-p polymode-mode)
+                (local-set-key (kbd "C-c C-p") #'ess-eval-paragraph))))
+  )
