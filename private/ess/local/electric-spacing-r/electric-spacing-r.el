@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 ;;; electric-spacing-r.el --- Insert operators with surrounding spaces smartly
 
 ;; Copyright (C) 2004, 2005, 2007-2016 Free Software Foundation, Inc.

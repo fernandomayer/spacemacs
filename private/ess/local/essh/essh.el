@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 ;;; essh.el --- a set of commands that emulate for bash what ESS is to R.
 ;; https://www.emacswiki.org/emacs/essh.el
 ;; Filename: essh.el

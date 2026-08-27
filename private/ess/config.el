@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 ;;; config.el --- ESS Layer configuration File for Spacemacs
 ;;
 ;; Copyright (c) 2012-2016 Sylvain Benner & Contributors

@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 ;;; packages.el --- polymode layer packages file for Spacemacs.
 ;;
 ;; Copyright (c) 2012-2016 Sylvain Benner & Contributors

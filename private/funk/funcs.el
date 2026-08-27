@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 ;;======================================================================
 ;; Functions only
 ;;======================================================================
@@ -222,3 +224,37 @@ command append each line to the kill-ring."
 ;; key binding
 ;; (global-set-key "\C-c\M-k" 'quick-cut-line)
 (global-set-key (kbd "s-<delete>") 'quick-cut-line)
+
+;;======================================================================
+;; vterm
+;;======================================================================
+
+;; Send text from the current buffer to vterm
+(defun my-vterm-send-line-or-region ()
+  "Send the current line or selected region to the active vterm."
+  (interactive)
+  (let* ((text (if (use-region-p)
+                   (buffer-substring-no-properties
+                    (region-beginning) (region-end))
+                 (buffer-substring-no-properties
+                  (line-beginning-position) (line-end-position))))
+         ;; Look for any buffer running vterm-mode
+         (vterm-buf (seq-find (lambda (buf)
+                                (provided-mode-derived-p
+                                 (buffer-local-value 'major-mode buf)
+                                 'vterm-mode))
+                              (buffer-list))))
+    (if vterm-buf
+        (progn
+          (with-current-buffer vterm-buf
+            (vterm-send-string text)
+            (vterm-send-return))
+          ;; If there is no selection (single line), automatically
+          ;; advance to the next line
+          (unless (use-region-p)
+            (forward-line 1)))
+      (message
+       "No vterm terminal open. Use SPC ' to open one first."))))
+;; key binding
+(with-eval-after-load 'sh-script
+  (define-key sh-mode-map (kbd "<C-return>") 'my-vterm-send-line-or-region))
