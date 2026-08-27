@@ -38,6 +38,8 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     (llm-client :variables
+                 llm-client-enable-gptel t)
      csv
      helm
      treemacs
@@ -89,7 +91,7 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages
    '(
-     gptel
+     ;; gptel
      gptel-commit
      poly-R
      quarto-mode
@@ -710,6 +712,33 @@ you should place your code here."
     :after (gptel magit)
     :custom
     (gptel-commit-stream t))
+
+  ;; Função para enviar texto do buffer atual para o vterm
+  (defun my-vterm-send-line-or-region ()
+    "Envia a linha atual ou a região selecionada para o vterm ativo."
+    (interactive)
+    (let* ((text (if (use-region-p)
+                     (buffer-substring-no-properties (region-beginning) (region-end))
+                   (buffer-substring-no-properties (line-beginning-position) (line-end-position))))
+           ;; Procura por qualquer buffer que esteja rodando o vterm-mode
+           (vterm-buf (seq-find (lambda (buf)
+                                  (provided-mode-derived-p
+                                   (buffer-local-value 'major-mode buf)
+                                   'vterm-mode))
+                                (buffer-list))))
+      (if vterm-buf
+          (progn
+            (with-current-buffer vterm-buf
+              (vterm-send-string text)
+              (vterm-send-return))
+            ;; Se não houver seleção (apenas 1 linha), avança para a próxima linha automaticamente
+            (unless (use-region-p)
+              (forward-line 1)))
+        (message "Nenhum terminal vterm aberto. Pressione SPC ' para abrir um primeiro."))))
+
+  ;; Mapeia o C-Enter (C-return) para o sh-mode (scripts shell)
+  (with-eval-after-load 'sh-script
+    (define-key sh-mode-map (kbd "<C-return>") 'my-vterm-send-line-or-region))
 
   ;; org-mode ----------------------------------------------------------
   ;; (setq org-preview-latex-default-process 'dvisvgm)
