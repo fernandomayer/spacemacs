@@ -9,7 +9,14 @@ This repository contains a personal Spacemacs configuration. It consists of:
 - `spacemacs.el` — the main `.spacemacs` dotfile (installed at `~/.spacemacs`)
 - `private/` — custom private layers to be placed at `~/.emacs.d/private/`
 
-To deploy: copy `spacemacs.el` to `~/.spacemacs` and symlink or copy the `private/` subdirectories into `~/.emacs.d/private/`. Then add the layer names to `dotspacemacs-configuration-layers` in `.spacemacs`.
+To deploy: run `./install.sh`, which copies `spacemacs.el` to
+`~/.spacemacs` (backing up the previous file to `~/.spacemacs.bk`) and
+copies the `private/` subdirectories into `~/.emacs.d/private/`. These
+are plain copies, not symlinks — after editing files in this repo,
+redeploy (`./install.sh`, or `cp -r private/* ~/.emacs.d/private/` for
+just the private layers) for the change to take effect in a running
+Emacs. New layer names still need to be added to
+`dotspacemacs-configuration-layers` in `.spacemacs`.
 
 ## Private Layers
 
@@ -27,6 +34,14 @@ A fork of the official Spacemacs ESS layer with:
 - `C-:` prepends a function with its namespace (e.g., `mean` → `stats::mean`)
 - Local packages in `private/ess/local/`: `electric-spacing-r`, `essh`
 - Also loads `essgd` for in-buffer plot display
+- `essh` binds `C-c C-r` / `C-c C-b` / `C-c C-j` / `C-c C-n` / `C-c C-f`
+  / `C-c C-d` in `sh-mode` (wired in `ess/packages.el`'s
+  `ess/init-essh`) for `pipe-region/buffer/line-to-shell`,
+  `pipe-line-to-shell-and-step`, `pipe-function-to-shell`, and
+  `shell-cd-current-directory`. `<C-return>` in `sh-mode` is reserved
+  for funk's `my-vterm-send-line-or-region` — don't rebind it here;
+  essh silently overwrote that binding once already via its
+  `sh-mode-hook`.
 
 ### `polymode`
 Wires up polymode for mixed-language files:
@@ -54,6 +69,7 @@ Personal functions and global keybindings (no packages installed):
 | `s-<delete>` | `quick-cut-line` |
 | `C-TAB` | `other-window` |
 | `C-+` / `C--` | Increase/decrease font size |
+| `C-<return>` (in `sh-mode` buffers) | `my-vterm-send-line-or-region` — send current line/region to the active vterm |
 
 ### `elpy`
 Third-party layer for Python support via `elpy`. Do **not** enable alongside the built-in `python` layer.
@@ -76,3 +92,8 @@ Each layer under `private/` follows Spacemacs conventions:
 - `keybindings.el` — global key bindings only
 
 When adding a new package to a layer, declare it in `packages.el`'s `<layer>-packages` list and provide an `init-` function. For post-initialization hooks on packages owned by another layer, use `post-init-`.
+
+Every `.el` file starts with `;;; -*- lexical-binding: t; -*-` on its
+own first line, followed by a blank line, then the original file
+header/description. Emacs 31 warns on missing lexical-binding cookies
+(previously silent); keep new files consistent with this layout.
