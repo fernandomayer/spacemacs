@@ -82,7 +82,9 @@ Third-party layer for Python support via `elpy`. Do **not** enable alongside the
 - **gptel**: configured to use GitHub Copilot backend with
   `claude-sonnet-5` model (Copilot retires models; a retired one makes
   gptel/gptel-commit fail silently); auto-scrolls and fills responses
-- **Layers active**: `csv`, `helm`, `treemacs`, `auto-completion`, `git`, `markdown`, `org`, `latex`, `rust`, `html`, `yaml`, `bm`, `docker`, `ess`, `funk`, `polymode`, `elpy`, `ipython-notebook`
+- **Layers active**: `csv`, `helm`, `treemacs`, `auto-completion`, `git`,
+  `markdown`, `lua`, `org`, `latex`, `rust`, `html`, `yaml`, `bm`,
+  `docker`, `ess`, `funk`, `polymode`, `elpy`, `ipython-notebook`
 - **Additional packages**: `gptel`, `gptel-commit`, `poly-R`, `quarto-mode`, `poly-noweb`, `poly-org`, `poly-markdown`, `copilot`
 
 ## Layer File Structure
