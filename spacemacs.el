@@ -50,6 +50,7 @@ This function should only modify configuration layer settings."
      markdown
      multiple-cursors
      javascript ; for json files
+     lua
      org
      (shell :variables
             shell-default-height 30
@@ -693,7 +694,7 @@ you should place your code here."
   (add-hook 'gptel-post-response-functions 'fill-region)
   (setq gptel-default-mode 'markdown-mode)
   ;; (setq-default gptel-model "gpt-4o")
-  (setq gptel-model 'claude-sonnet-4.5
+  (setq gptel-model 'claude-sonnet-5
         gptel-backend (gptel-make-gh-copilot "Copilot"))
 
   ;; Set prompt and response prefixes for different modes
@@ -713,6 +714,8 @@ you should place your code here."
     :custom
     (gptel-commit-stream t)
     :config
+    ;; gptel-commit copies gptel-backend at load time; force Copilot
+    (setq gptel-commit-backend gptel-backend)
     ;; Default prompt (rule A) prefixes single-file commits with
     ;; "path/to/file: ". Drop that prefix; keep everything else,
     ;; including the multi-file bullet list, unchanged.
