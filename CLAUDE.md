@@ -79,9 +79,9 @@ Third-party layer for Python support via `elpy`. Do **not** enable alongside the
 - **Editing style**: `emacs` (not vim/hybrid)
 - **Fill column**: 80, with `auto-fill-mode` enabled globally
 - **ESS backend**: `lsp` with `ess-use-flymake` disabled
-- **gptel**: configured to use GitHub Copilot backend with `claude-sonnet-5` model (Copilot retires models; a
-  retired one makes gptel/gptel-commit fail silently); auto-scrolls and
-  fills responses
+- **gptel**: configured to use GitHub Copilot backend with
+  `claude-sonnet-5` model (Copilot retires models; a retired one makes
+  gptel/gptel-commit fail silently); auto-scrolls and fills responses
 - **Layers active**: `csv`, `helm`, `treemacs`, `auto-completion`, `git`, `markdown`, `org`, `latex`, `rust`, `html`, `yaml`, `bm`, `docker`, `ess`, `funk`, `polymode`, `elpy`, `ipython-notebook`
 - **Additional packages**: `gptel`, `gptel-commit`, `poly-R`, `quarto-mode`, `poly-noweb`, `poly-org`, `poly-markdown`, `copilot`
 
