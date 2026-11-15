@@ -140,18 +140,29 @@
   ;; R --------------------------------------------------------------------------
   (with-eval-after-load 'ess-site
     ;; ESS
+    ;; Estilo próprio (OWN): recuo de 4, sempre a partir do início da linha
+    ;; que abriu a chamada ou o bloco, sem alinhar ao parêntese nem ao if
+    ;; (o C++ do ESS atual alinha os dois). A exceção são os argumentos de
+    ;; function(), alinhados ao parêntese. É o RStudio- com recuo 4. O mesmo
+    ;; estilo está em ~/git/ai-instructions/formata.el, e os dois precisam
+    ;; ficar iguais.
+    (customize-set-variable
+     'ess-own-style-list
+     '((ess-indent-offset . 4)
+       (ess-offset-arguments . prev-line)
+       (ess-offset-arguments-newline . prev-line)
+       (ess-offset-block . prev-line)
+       (ess-offset-continued . straight)
+       (ess-align-nested-calls)
+       (ess-align-arguments-in-calls "function[ \t]*(")
+       (ess-align-continuations-in-calls)
+       (ess-align-blocks)
+       (ess-indent-from-lhs arguments)
+       (ess-indent-from-chain-start . t)
+       (ess-indent-with-fancy-comments)))
     (add-hook 'ess-mode-hook
               (lambda ()
-                (ess-set-style 'C++ 'quiet)
-                ;; Because
-                ;;                                 DEF GNU BSD K&R C++
-                ;; ess-indent-level                  2   2   8   5   4
-                ;; ess-continued-statement-offset    2   2   8   5   4
-                ;; ess-brace-offset                  0   0  -8  -5  -4
-                ;; ess-arg-function-offset           2   4   0   0   0
-                ;; ess-expression-offset             4   2   8   5   4
-                ;; ess-else-offset                   0   0   0   0   0
-                ;; ess-close-brace-offset            0   0   0   0   0
+                (ess-set-style 'OWN 'quiet)
                 (add-hook 'local-write-file-hooks
                           (lambda ()
                             (ess-nuke-trailing-whitespace)))))
@@ -316,11 +327,75 @@
   (interactive)
   (ess-eval-linewise "dev.off()"))
 
+;; Preenchimento até 80 colunas em .qmd e .Rmd. As regras abaixo repetem as
+;; de ~/git/ai-instructions/formata.el, e os dois precisam ficar iguais.
+
+;; Começo de linha que o pandoc pode ler como marcador: lista (inclusive a de
+;; exemplos, com @), citação, bloco de linhas, lista de definição ou título.
+(defconst markdown-inicio-perigoso
+  (concat "\\(?:@\\|(@\\|#\\|>\\|[|:]\\(?:[ \t]\\|$\\)"
+          "\\|[-+*]\\(?:[ \t]\\|$\\)"
+          "\\|(?[0-9]+[.)]\\(?:[ \t]\\|$\\)"
+          "\\|(?[A-Za-z][.)]\\(?:[ \t]\\|$\\)\\)"))
+
+(defun markdown-nao-quebra-p ()
+  "Proíbe quebrar a linha logo depois de `r ou antes de um marcador.
+O knitr só avalia o código em linha quando `r é seguido de espaço, e
+não de quebra de linha. Os marcadores estão em
+`markdown-inicio-perigoso'."
+  (or (save-excursion
+        (skip-chars-backward " \t")
+        (and (>= (- (point) 2) (point-min))
+             (string= (buffer-substring-no-properties (- (point) 2) (point))
+                      "`r")))
+      (save-excursion
+        (skip-chars-forward " \t")
+        (looking-at-p markdown-inicio-perigoso))))
+
+(defun preenche-legenda ()
+  "Preenche a legenda YAML dobrada (#| fig-cap: >-) em volta do ponto.
+Mantém o prefixo \"#|\" com o recuo YAML; sem o recuo, o YAML fica
+inválido e o knitr para."
+  (interactive)
+  (let ((re "^\\(#|[ \t][ \t]+\\)[^ \t\n]") ini fim pref)
+    (save-excursion
+      (beginning-of-line)
+      (unless (looking-at re)
+        (user-error "Fora de uma legenda recuada"))
+      (while (and (not (bobp))
+                  (save-excursion (forward-line -1) (looking-at-p re)))
+        (forward-line -1))
+      (looking-at re)
+      (setq ini (point) pref (match-string 1))
+      (while (looking-at-p re) (forward-line 1))
+      (setq fim (point))
+      (let ((fill-prefix pref)
+            (fill-column 80)
+            (sentence-end-double-space nil))
+        (fill-region-as-paragraph ini fim)))))
+
+(defun preenche-ou-padrao (&optional arg)
+  "M-q: numa legenda recuada, `preenche-legenda'; fora dela, o comando padrão."
+  (interactive "P")
+  (if (save-excursion (beginning-of-line)
+                      (looking-at-p "^#|[ \t][ \t]+[^ \t\n]"))
+      (preenche-legenda)
+    (prog-fill-reindent-defun arg)))
+
 ;; Set keybindings
 (defun ess/post-init-ess ()
   ;; R source buffers: C-. to dev.off()
   (with-eval-after-load 'ess-r-mode
-    (define-key ess-r-mode-map (kbd "C-.") #'ess-dev-off))
+    (define-key ess-r-mode-map (kbd "C-.") #'ess-dev-off)
+    ;; M-q que preserva o recuo das legendas #|
+    (define-key ess-r-mode-map (kbd "M-q") #'preenche-ou-padrao))
+
+  ;; Texto de .qmd, .Rmd e .md: não quebra a linha depois de `r nem antes de
+  ;; um marcador do pandoc
+  (add-hook 'markdown-mode-hook
+            (lambda ()
+              (add-hook 'fill-nobreak-predicate #'markdown-nao-quebra-p
+                        nil t)))
 
   ;; iESS (*R* REPL) – bind when the mode starts, no map needed at compile time
   (add-hook 'inferior-ess-r-mode-hook

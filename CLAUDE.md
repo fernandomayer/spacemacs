@@ -22,7 +22,23 @@ Emacs. New layer names still need to be added to
 
 ### `ess`
 A fork of the official Spacemacs ESS layer with:
-- R indentation style set to `C++` (via `ess-set-style`)
+- R indentation style `OWN` (via `ess-set-style`), defined in `packages.el`
+  through `ess-own-style-list`: RStudio- with a 4-space indent, so a
+  continuation line is indented from the start of the line that opened the call
+  or block, never aligned to the parenthesis or to `if` (only `function(`
+  arguments align). `config.el`'s `ess-offset-arguments` setting has no effect,
+  since the style overrides it.
+- `M-q` in R buffers runs `preenche-ou-padrao`: on an indented `#|` caption line
+  (a YAML folded block, `#| fig-cap: >-`) it fills the caption to 80 columns and
+  keeps the `#|` prefix and the YAML indentation after it; elsewhere it runs
+  `prog-fill-reindent-defun`.
+- In `markdown-mode` buffers (the host mode of `.qmd` and `.Rmd`),
+  `markdown-nao-quebra-p` is added to `fill-nobreak-predicate`: no line break
+  right after `` `r `` (knitr would print the code verbatim) or before something
+  pandoc reads as a marker (`@`, `-`, `1.`, `>`, `#`, `|`, ...).
+- The style and the no-break rule are repeated in
+  `~/git/ai-instructions/formata.el`, a batch script that applies the same
+  formatting; change both together.
 - `ess-enable-smartparens` variable added (disabled by default; enable in `.spacemacs` like `ess-enable-smart-equals`)
 - `ess-eval-visibly` set to `t` so sent code appears in the console
 - `ess-indent-with-fancy-comments` disabled
