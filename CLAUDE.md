@@ -33,8 +33,10 @@ A fork of the official Spacemacs ESS layer with:
   nothing in that block runs in such a session.
 - `M-q` in R buffers runs `preenche-ou-padrao`: on an indented `#|` caption line
   (a YAML folded block, `#| fig-cap: >-`) it fills the caption to 80 columns and
-  keeps the `#|` prefix and the YAML indentation after it; elsewhere it runs
-  `prog-fill-reindent-defun`.
+  keeps the `#|` prefix and the YAML indentation after it; on any other `#|`
+  line (a chunk option) it does nothing, since the default command treats
+  consecutive `#|` lines as one comment and joins the options into one line;
+  elsewhere it runs `prog-fill-reindent-defun`.
 - In `markdown-mode` buffers (the host mode of `.qmd` and `.Rmd`),
   `markdown-nao-quebra-p` is added to `fill-nobreak-predicate`: no line break
   right after `` `r `` (knitr would print the code verbatim) or before something

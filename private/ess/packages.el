@@ -382,12 +382,21 @@ inválido e o knitr para."
         (fill-region-as-paragraph ini fim)))))
 
 (defun preenche-ou-padrao (&optional arg)
-  "M-q: numa legenda recuada, `preenche-legenda'; fora dela, o comando padrão."
+  "M-q em buffers R.
+Numa linha de texto de legenda recuada (#|   texto), `preenche-legenda'.
+Numa linha de opção (#| echo: false, #| fig-cap: >-), não faz nada: o
+comando padrão trata as linhas #| seguidas como um comentário só, junta
+as opções numa linha e invalida o YAML. Fora delas,
+`prog-fill-reindent-defun'."
   (interactive "P")
-  (if (save-excursion (beginning-of-line)
-                      (looking-at-p "^#|[ \t][ \t]+[^ \t\n]"))
-      (preenche-legenda)
-    (prog-fill-reindent-defun arg)))
+  (let ((linha (save-excursion
+                 (beginning-of-line)
+                 (cond ((looking-at-p "#|[ \t][ \t]+[^ \t\n]") 'legenda)
+                       ((looking-at-p "[ \t]*#|") 'opcao)))))
+    (pcase linha
+      ('legenda (preenche-legenda))
+      ('opcao (message "M-q não age em linhas de opção #|"))
+      (_ (prog-fill-reindent-defun arg)))))
 
 ;; Set keybindings
 (defun ess/post-init-ess ()
