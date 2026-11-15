@@ -137,15 +137,17 @@
           (end-of-line)))
       ))
 
-  ;; R --------------------------------------------------------------------------
-  (with-eval-after-load 'ess-site
-    ;; ESS
-    ;; Estilo próprio (OWN): recuo de 4, sempre a partir do início da linha
-    ;; que abriu a chamada ou o bloco, sem alinhar ao parêntese nem ao if
-    ;; (o C++ do ESS atual alinha os dois). A exceção são os argumentos de
-    ;; function(), alinhados ao parêntese. É o RStudio- com recuo 4. O mesmo
-    ;; estilo está em ~/git/ai-instructions/formata.el, e os dois precisam
-    ;; ficar iguais.
+  ;; Estilo de indentação -------------------------------------------------------
+  ;; Estilo próprio (OWN): recuo de 4, sempre a partir do início da linha que
+  ;; abriu a chamada ou o bloco, sem alinhar ao parêntese nem ao if (o C++ do
+  ;; ESS atual alinha os dois). A exceção são os argumentos de function(),
+  ;; alinhados ao parêntese. É o RStudio- com recuo 4. O mesmo estilo está em
+  ;; ~/git/ai-instructions/formata.el, e os dois precisam ficar iguais.
+  ;;
+  ;; Fica fora do bloco do ess-site: um .qmd aberto antes de qualquer .R carrega
+  ;; só o ess-r-mode, pelo polymode, e o ess-site não chega a ser carregado. O
+  ;; ess-custom carrega nos dois casos.
+  (with-eval-after-load 'ess-custom
     (customize-set-variable
      'ess-own-style-list
      '((ess-indent-offset . 4)
@@ -160,9 +162,14 @@
        (ess-indent-from-lhs arguments)
        (ess-indent-from-chain-start . t)
        (ess-indent-with-fancy-comments)))
+    (customize-set-variable 'ess-style 'OWN)
+    (add-hook 'ess-mode-hook (lambda () (ess-set-style 'OWN))))
+
+  ;; R --------------------------------------------------------------------------
+  (with-eval-after-load 'ess-site
+    ;; ESS
     (add-hook 'ess-mode-hook
               (lambda ()
-                (ess-set-style 'OWN 'quiet)
                 (add-hook 'local-write-file-hooks
                           (lambda ()
                             (ess-nuke-trailing-whitespace)))))

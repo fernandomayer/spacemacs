@@ -27,7 +27,10 @@ A fork of the official Spacemacs ESS layer with:
   continuation line is indented from the start of the line that opened the call
   or block, never aligned to the parenthesis or to `if` (only `function(`
   arguments align). `config.el`'s `ess-offset-arguments` setting has no effect,
-  since the style overrides it.
+  since the style overrides it. The style is set when `ess-custom` loads, not in
+  the `with-eval-after-load 'ess-site` block: a `.qmd` opened before any `.R`
+  file loads only `ess-r-mode`, through polymode, and never `ess-site`, so
+  nothing in that block runs in such a session.
 - `M-q` in R buffers runs `preenche-ou-padrao`: on an indented `#|` caption line
   (a YAML folded block, `#| fig-cap: >-`) it fills the caption to 80 columns and
   keeps the `#|` prefix and the YAML indentation after it; elsewhere it runs
