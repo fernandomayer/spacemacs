@@ -339,11 +339,15 @@
 
 ;; Começo de linha que o pandoc pode ler como marcador: lista (inclusive a de
 ;; exemplos, com @), citação, bloco de linhas, lista de definição ou título.
+;; Inclui o código em linha seguido de . ou ), como `r k`.: quando o knitr
+;; imprime um inteiro ou uma letra, a linha começa com 40. ou b), e dentro de um
+;; item o pandoc abre ali uma sublista.
 (defconst markdown-inicio-perigoso
   (concat "\\(?:@\\|(@\\|#\\|>\\|[|:]\\(?:[ \t]\\|$\\)"
           "\\|[-+*]\\(?:[ \t]\\|$\\)"
           "\\|(?[0-9]+[.)]\\(?:[ \t]\\|$\\)"
-          "\\|(?[A-Za-z][.)]\\(?:[ \t]\\|$\\)\\)"))
+          "\\|(?[A-Za-z][.)]\\(?:[ \t]\\|$\\)"
+          "\\|(?`r [^`]*`[.)]\\(?:[ \t]\\|$\\)\\)"))
 
 (defun markdown-nao-quebra-p ()
   "Proíbe quebrar a linha logo depois de `r ou antes de um marcador.
@@ -358,6 +362,147 @@ não de quebra de linha. Os marcadores estão em
       (save-excursion
         (skip-chars-forward " \t")
         (looking-at-p markdown-inicio-perigoso))))
+
+;; Marcador de item de lista do pandoc, com os brancos que o seguem: -, + ou *;
+;; número ou letra seguidos de . ou ), ou entre parênteses, como (a); ou (@) da
+;; lista de exemplos. O markdown-mode só conhece -, +, * e 1., e o M-q juntava
+;; num parágrafo só os itens (a), (b) e (c).
+(defconst markdown-marcador-item
+  (concat "[ \t]*\\(?:[-+*]\\|(?\\(?:[0-9]+\\|[A-Za-z]\\)[.)]"
+          "\\|(@[A-Za-z0-9_-]*)\\)[ \t]+"))
+
+;; Linha que não pertence a parágrafo algum: a que abre ou fecha matemática em
+;; bloco ($$) ou um bloco cercado de código. Sem ela, o M-q juntava as linhas da
+;; fórmula ao parágrafo.
+(defconst markdown-linha-separa "[ \t]*\\(?:\\$\\$\\|```\\|~~~\\)")
+
+(defun markdown-prefixo-item ()
+  "Prefixo de preenchimento da linha, como o do markdown-mode.
+Num item com um marcador que o markdown-mode não conhece, como (a), o
+prefixo é o próprio marcador, que o preenchimento troca por brancos nas
+linhas seguintes, como faz com o - de um item."
+  (or (markdown-adaptive-fill-function)
+      (and (looking-at markdown-marcador-item)
+           (match-string-no-properties 0))))
+
+(defun markdown-em-cifroes-p ()
+  "Não nil se a linha do ponto pertence a matemática em bloco ($$).
+Pertencem ao bloco as linhas que o abrem e o fecham. Como em
+formata.el, o bloco abre numa linha que começa com $$ e fecha na
+próxima linha que contém $$."
+  (save-excursion
+    (let ((alvo (line-beginning-position)) dentro)
+      (goto-char (point-min))
+      (while (< (point) alvo)
+        (setq dentro (if dentro
+                         (not (looking-at-p ".*\\$\\$"))
+                       (and (looking-at-p "[ \t]*\\$\\$")
+                            (not (looking-at-p
+                                  "[ \t]*\\$\\$.*\\$\\$[ \t]*$")))))
+        (forward-line 1))
+      (or dentro (looking-at-p "[ \t]*\\$\\$")))))
+
+(defun markdown-coluna-item ()
+  "Coluna do texto do item de lista acima da linha do ponto, ou nil.
+Sobe pelas linhas em branco e pelas recuadas até o item mais próximo.
+Uma linha sem recuo que não é item encerra a lista, a não ser que
+continue o parágrafo de cima, como em formata--segmentos."
+  (save-excursion
+    (let (col fim)
+      (while (and (not fim) (= (forward-line -1) 0))
+        (cond ((looking-at-p "[ \t]*$"))
+              ((looking-at markdown-marcador-item)
+               (setq col (- (match-end 0) (point)) fim t))
+              ((looking-at-p "[ \t]"))
+              ((or (bobp)
+                   (looking-at-p paragraph-start)
+                   (save-excursion
+                     (forward-line -1)
+                     (looking-at-p paragraph-separate)))
+               (setq fim t))))
+      col)))
+
+(defun markdown-recuo-item ()
+  "Recuo do parágrafo do ponto, se ele está recuado dentro de um item.
+É o branco no início da primeira linha do parágrafo. Fora de um item,
+ou com recuo de 4 ou mais além do texto do item (um bloco de código),
+devolve nil."
+  (save-excursion
+    (end-of-line)
+    (backward-paragraph)
+    (while (and (not (eobp)) (looking-at-p paragraph-separate))
+      (forward-line 1))
+    (let ((recuo (current-indentation))
+          (col (markdown-coluna-item)))
+      (when (and (> recuo 0) col (< recuo (+ col 4)))
+        (buffer-substring-no-properties
+         (point) (progn (skip-chars-forward " \t") (point)))))))
+
+(defun markdown-preenche-recuado (ini fim recuo justify)
+  "Preenche entre INI e FIM o texto recuado em RECUO, como formata.el.
+Isolado da lista, o texto recuado é um bloco de código para o
+markdown-mode, que não o preenche. O recuo sai então de cada linha, o
+texto é preenchido como markdown, com a largura reduzida na mesma
+medida, e o recuo volta. JUSTIFY é o de `fill-paragraph'."
+  (let* ((tira (format "\\`[ \t]\\{0,%d\\}" (length recuo)))
+         (largura (- fill-column (length recuo)))
+         (velho (buffer-substring-no-properties ini fim))
+         (cheio (with-temp-buffer
+                  (delay-mode-hooks (markdown-mode))
+                  (add-hook 'fill-nobreak-predicate #'markdown-nao-quebra-p
+                            nil t)
+                  (setq-local adaptive-fill-function #'markdown-prefixo-item)
+                  (setq fill-column largura)
+                  (insert (mapconcat (lambda (s)
+                                       (replace-regexp-in-string tira "" s))
+                                     (split-string velho "\n") "\n"))
+                  (goto-char (point-min))
+                  (while (not (eobp))
+                    (unless (looking-at-p "[ \t]*$")
+                      (save-excursion (end-of-line) (fill-paragraph justify)))
+                    (forward-line 1))
+                  (buffer-string)))
+         (novo (mapconcat (lambda (s) (if (string= s "") s (concat recuo s)))
+                          (split-string cheio "\n") "\n")))
+    (unless (string= novo velho)
+      (replace-region-contents ini fim (lambda () novo)))))
+
+(defun markdown-preenche (&optional justify)
+  "M-q em texto markdown, com as regras de formata.el.
+Em matemática em bloco ($$), não faz nada. O texto recuado dentro de um
+item de lista, que `markdown-fill-paragraph' toma por bloco de código, é
+preenchido por `markdown-preenche-recuado'. Fora disso,
+`markdown-fill-paragraph'. JUSTIFY é o de `fill-paragraph'."
+  (let (recuo)
+    (cond ((markdown-em-cifroes-p)
+           (message "M-q não age em matemática em bloco ($$)"))
+          ((and (not (markdown-get-enclosing-fenced-block-construct))
+                (not (save-excursion (beginning-of-line)
+                                     (looking-at-p "[ \t]*$")))
+                (setq recuo (markdown-recuo-item)))
+           (save-excursion
+             (end-of-line)
+             (let* ((fim (progn (forward-paragraph) (point)))
+                    (ini (progn (backward-paragraph)
+                                (while (and (< (point) fim)
+                                            (looking-at-p paragraph-separate))
+                                  (forward-line 1))
+                                (point))))
+               (markdown-preenche-recuado ini fim recuo justify))))
+          (t (markdown-fill-paragraph justify))))
+  t)
+
+(defun markdown-regras-de-lista ()
+  "Aplica no buffer markdown as regras de lista de formata.el.
+Cada item, inclusive (a), é um parágrafo; as linhas de $$ e as cercas de
+código separam parágrafos; e o M-q é `markdown-preenche'."
+  (setq-local paragraph-start
+              (concat paragraph-start "\\|" markdown-linha-separa
+                      "\\|" markdown-marcador-item))
+  (setq-local paragraph-separate
+              (concat paragraph-separate "\\|" markdown-linha-separa))
+  (setq-local adaptive-fill-function #'markdown-prefixo-item)
+  (setq-local fill-paragraph-function #'markdown-preenche))
 
 (defun preenche-legenda ()
   "Preenche a legenda YAML dobrada (#| fig-cap: >-) em volta do ponto.
@@ -407,11 +552,12 @@ as opções numa linha e invalida o YAML. Fora delas,
     (define-key ess-r-mode-map (kbd "M-q") #'preenche-ou-padrao))
 
   ;; Texto de .qmd, .Rmd e .md: não quebra a linha depois de `r nem antes de
-  ;; um marcador do pandoc
+  ;; um marcador do pandoc, e o M-q segue as regras de lista de formata.el
   (add-hook 'markdown-mode-hook
             (lambda ()
               (add-hook 'fill-nobreak-predicate #'markdown-nao-quebra-p
-                        nil t)))
+                        nil t)
+              (markdown-regras-de-lista)))
 
   ;; iESS (*R* REPL) – bind when the mode starts, no map needed at compile time
   (add-hook 'inferior-ess-r-mode-hook

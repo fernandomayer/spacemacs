@@ -40,10 +40,25 @@ A fork of the official Spacemacs ESS layer with:
 - In `markdown-mode` buffers (the host mode of `.qmd` and `.Rmd`),
   `markdown-nao-quebra-p` is added to `fill-nobreak-predicate`: no line break
   right after `` `r `` (knitr would print the code verbatim) or before something
-  pandoc reads as a marker (`@`, `-`, `1.`, `>`, `#`, `|`, ...).
-- The style and the no-break rule are repeated in
+  pandoc reads as a marker (`@`, `-`, `1.`, `>`, `#`, `|`, ...), including
+  inline code followed by `.` or `)` (`` `r k`. ``), which becomes a marker such
+  as `40.` when knitr prints an integer.
+- `M-q` in `markdown-mode` buffers runs `markdown-preenche`, set as
+  `fill-paragraph-function` by `markdown-regras-de-lista`. Every list item is
+  its own paragraph, including the pandoc markers markdown-mode does not know
+  (`(a)`, `a)`, `(1)`, `(@)`), whose continuation lines get a hanging indent.
+  `$$` lines and code fences separate paragraphs, and `M-q` inside a `$$` block
+  does nothing. Indented text inside an item (after a `$$` block or a blank
+  line), which markdown-mode reads as a code block, is filled the way
+  `formata.el` fills it: the indentation is removed, the text is filled as
+  markdown with the width reduced by the same amount, and the indentation is put
+  back. One difference from `formata.el` remains: a line of raw LaTeX or HTML
+  next to a paragraph (`\medskip`, `<div>`), outside an inline formula, is
+  joined to the paragraph by `M-q` and left alone by the script.
+- The style, the no-break rule and the list rules are repeated in
   `~/git/ai-instructions/formata.el`, a batch script that applies the same
-  formatting; change both together.
+  formatting; change both together, and check that they still agree with the
+  procedure in `~/git/ai-instructions/CLAUDE.md`.
 - `ess-enable-smartparens` variable added (disabled by default; enable in `.spacemacs` like `ess-enable-smart-equals`)
 - `ess-eval-visibly` set to `t` so sent code appears in the console
 - `ess-indent-with-fancy-comments` disabled
