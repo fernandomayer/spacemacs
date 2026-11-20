@@ -606,7 +606,10 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config'
   first."
-  (spacemacs/force-init-spacemacs-env))
+  (spacemacs/force-init-spacemacs-env)
+  ;; Arquivos de site-start.d dos pacotes RPM (asymptote, cmake, rpmdevtools)
+  ;; não têm o cookie lexical-binding, e o Emacs 31 avisa a cada início.
+  (add-to-list 'warning-suppress-types '(files missing-lexbind-cookie)))
 
 
 (defun dotspacemacs/user-load ()

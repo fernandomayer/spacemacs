@@ -9,13 +9,13 @@ This repository contains a personal Spacemacs configuration. It consists of:
 - `spacemacs.el` — the main `.spacemacs` dotfile (installed at `~/.spacemacs`)
 - `private/` — custom private layers to be placed at `~/.emacs.d/private/`
 
-To deploy: run `./install.sh`, which copies `spacemacs.el` to
-`~/.spacemacs` (backing up the previous file to `~/.spacemacs.bk`) and
-copies the `private/` subdirectories into `~/.emacs.d/private/`. These
-are plain copies, not symlinks — after editing files in this repo,
-redeploy (`./install.sh`, or `cp -r private/* ~/.emacs.d/private/` for
-just the private layers) for the change to take effect in a running
-Emacs. New layer names still need to be added to
+To deploy: run `./install.sh`, which links `~/.spacemacs` to `spacemacs.el`
+(backing up a previous regular file to `~/.spacemacs.bk`) and links the layers
+`elpy`, `ess`, `funk` and `polymode` and the `snippets/markdown-mode` folder
+into `~/.emacs.d/private/`. These are symlinks, so after a `git pull` or an edit
+here the change takes effect the next time Emacs starts, with no redeploy. A new
+layer or snippet folder must also be added to the lists in `install.sh` and then
+`./install.sh` run again. New layer names still need to be added to
 `dotspacemacs-configuration-layers` in `.spacemacs`.
 
 ## Private Layers
